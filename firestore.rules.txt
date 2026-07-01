@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // بطاقات العملاء ونقاطهم — معرّف كل بطاقة هو رقم الجوال نفسه (05XXXXXXXX)
+    match /customers/{phone} {
+
+      // التحقق من الرصيد: مسموح للجميع (قراءة فقط لبطاقة يعرف صاحبها رقمها بالضبط)
+      allow get: if true;
+
+      // قائمة كل العملاء (لوحة الإدارة): للموظفين المسجّلين فقط
+      allow list: if request.auth != null;
+
+      // التسجيل الأولي لعميل جديد: للموظفين فقط، وبشروط صارمة:
+      // - رقم الجوال بصيغة سعودية صحيحة بالضبط (05 + 8 أرقام)
+      // - الرصيد يجب أن يبدأ من صفر بالضبط (لا يمكن تسجيل عميل برصيد جاهز)
+      // - الاسم نص غير فارغ
+      // - لا حقول إضافية غير المسموح بها (منع حقن بيانات زائدة)
+      allow create: if request.auth != null
+                    && phone.matches('^05[0-9]{8}$')
+                    && request.resource.data.phone == phone
+                    && request.resource.data.points == 0
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() > 1
+                    && request.resource.data.registeredBy == request.auth.token.email
+                    && request.resource.data.keys().hasOnly(['name','phone','points','createdAt','registeredBy']);
+
+      // تعديل الرصيد (تحصيل / استبدال / تعديل يدوي): للموظفين فقط
+      // ولا يُسمح إطلاقاً برصيد سالب أو قيمة غير رقمية (حماية من أي خطأ برمجي)
+      allow update: if request.auth != null
+                    && request.resource.data.points is number
+                    && request.resource.data.points >= 0
+                    && request.resource.data.phone == resource.data.phone
+                    && request.resource.data.name == resource.data.name;
+
+      allow delete: if false;
+    }
+
+    // سجل حركات النقاط (تحصيل / استبدال / تعديل) — لا يُعدَّل ولا يُحذف أبداً (سجل تدقيق ثابت)
+    match /transactions/{id} {
+      allow read: if request.auth != null;
+      // يجب أن تكون الحركة موقّعة فعلياً باسم الموظف المسجّل دخوله (منع انتحال الهوية)
+      allow create: if request.auth != null
+                    && request.resource.data.staffEmail == request.auth.token.email
+                    && request.resource.data.phone.matches('^05[0-9]{8}$')
+                    && request.resource.data.points is number;
+      allow update, delete: if false;
+    }
+  }
+}
