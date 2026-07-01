@@ -256,6 +256,7 @@
     <p class="lm-sub">أدخل رقم جوال العميل ومبلغ الفاتورة، وسيتم احتساب النقاط تلقائياً (نقطة لكل 50 ريال).</p>
     <form id="collectForm">
       <div class="form-group"><input type="tel" id="collectPhone" placeholder="05XXXXXXXX" required dir="ltr" maxlength="10"/></div>
+      <div class="loyalty-balance-info" id="collectBalanceInfo"></div>
       <div class="form-group"><input type="number" id="collectAmount" placeholder="مبلغ الفاتورة (ريال)" required min="1" step="0.01" dir="ltr"/></div>
       <button type="submit" class="btn-gold full-width" id="collectSubmitBtn">إضافة النقاط</button>
     </form>
@@ -270,7 +271,9 @@
     <p class="lm-sub">أدخل رقم جوال العميل وعدد النقاط المطلوب استبدالها.</p>
     <form id="redeemForm">
       <div class="form-group"><input type="tel" id="redeemPhone" placeholder="05XXXXXXXX" required dir="ltr" maxlength="10"/></div>
+      <div class="loyalty-balance-info" id="redeemBalanceInfo"></div>
       <div class="form-group"><input type="number" id="redeemPoints" placeholder="عدد النقاط" required min="1" step="1" dir="ltr"/></div>
+      <div class="loyalty-value-info" id="redeemValueInfo"></div>
       <div class="form-group"><input type="text" id="redeemNote" placeholder="ملاحظة (اختياري): الهدية/الخصم المقدم"/></div>
       <button type="submit" class="btn-gold full-width" id="redeemSubmitBtn">تنفيذ الاستبدال</button>
     </form>
@@ -307,5 +310,6 @@
   ticker.addEventListener('touchend', () => ticker.style.animationPlayState = 'running');
 </script>
 <script src="loyalty.js"></script>
+<script src="reviews.js"></script>
 </body>
 </html>

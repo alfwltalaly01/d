@@ -97,6 +97,33 @@
 
 <section class="reviews" style="padding-top:0">
   <div class="container">
+    <div class="write-review-box">
+      <h3>⭐ شاركنا رأيك — تقييمك يُنشر فوراً</h3>
+      <form id="writeReviewForm">
+        <div class="star-rating-input" data-target="reviewRating">
+          <span data-val="5">★</span><span data-val="4">★</span><span data-val="3">★</span><span data-val="2">★</span><span data-val="1">★</span>
+        </div>
+        <input type="hidden" id="reviewRating" value="0"/>
+        <p class="live-review-note">اختر عدد النجوم أولاً</p>
+        <div class="form-group"><input type="text" id="reviewName" placeholder="اسمك" required/></div>
+        <div class="form-group"><textarea id="reviewComment" placeholder="اكتب تجربتك معنا..." rows="3" required></textarea></div>
+        <button type="submit" class="btn-gold full-width">نشر التقييم</button>
+      </form>
+      <div class="loyalty-result" id="writeReviewResult"></div>
+    </div>
+
+    <div class="section-header">
+      <span class="section-tag">آراء زوارنا</span>
+      <h2 class="section-title">تقييمات حقيقية<br/><span class="gold-text">من زوار الموقع</span></h2>
+    </div>
+    <div class="live-reviews-list" data-live-reviews style="margin-bottom:40px">
+      <div class="live-review-empty">جارٍ تحميل التقييمات...</div>
+    </div>
+
+    <div class="section-header">
+      <span class="section-tag">تقييمات موثّقة</span>
+      <h2 class="section-title">عملاء تعاملوا معنا<br/><span class="gold-text">وشاركونا تجربتهم</span></h2>
+    </div>
     <div class="reviews-grid">
       <div class="review-card">
         <div class="review-stars">★★★★★</div>
@@ -231,6 +258,7 @@
     <p class="lm-sub">أدخل رقم جوال العميل ومبلغ الفاتورة، وسيتم احتساب النقاط تلقائياً (نقطة لكل 50 ريال).</p>
     <form id="collectForm">
       <div class="form-group"><input type="tel" id="collectPhone" placeholder="05XXXXXXXX" required dir="ltr" maxlength="10"/></div>
+      <div class="loyalty-balance-info" id="collectBalanceInfo"></div>
       <div class="form-group"><input type="number" id="collectAmount" placeholder="مبلغ الفاتورة (ريال)" required min="1" step="0.01" dir="ltr"/></div>
       <button type="submit" class="btn-gold full-width" id="collectSubmitBtn">إضافة النقاط</button>
     </form>
@@ -245,7 +273,9 @@
     <p class="lm-sub">أدخل رقم جوال العميل وعدد النقاط المطلوب استبدالها.</p>
     <form id="redeemForm">
       <div class="form-group"><input type="tel" id="redeemPhone" placeholder="05XXXXXXXX" required dir="ltr" maxlength="10"/></div>
+      <div class="loyalty-balance-info" id="redeemBalanceInfo"></div>
       <div class="form-group"><input type="number" id="redeemPoints" placeholder="عدد النقاط" required min="1" step="1" dir="ltr"/></div>
+      <div class="loyalty-value-info" id="redeemValueInfo"></div>
       <div class="form-group"><input type="text" id="redeemNote" placeholder="ملاحظة (اختياري): الهدية/الخصم المقدم"/></div>
       <button type="submit" class="btn-gold full-width" id="redeemSubmitBtn">تنفيذ الاستبدال</button>
     </form>
@@ -282,5 +312,6 @@
   ticker.addEventListener('touchend', () => ticker.style.animationPlayState = 'running');
 </script>
 <script src="loyalty.js"></script>
+<script src="reviews.js"></script>
 </body>
 </html>
